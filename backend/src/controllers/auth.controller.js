@@ -1,3 +1,4 @@
+import cloudinary from "../lib/cloudinary.js"
 import { generateToken } from "../lib/utils.js"
 import User from "../models/user.model.js"
 import bcrypt from "bcryptjs"
@@ -89,10 +90,30 @@ export const logout = (req, res) => {
     }
 }
 
-export const updateProfile = (req, res) => {
+export const updateProfile = async (req, res) => {
     try {
-        
+        const userId = req.user._id
+        const {profilePic} = req.body
+        if(!profilePic){
+            return res.status(400).json({message: "Khong duoc de trong hinh anh"})
+        }
+
+        const uploadResponse = await cloudinary.uploader.upload(profilePic)
+        const updateUser = await User.findByIdAndDelete(userId, {profilePic: uploadResponse.secure_url}, {new:true})
+        return res.status(200).json(updateUser)
     } catch (error) {
-        
+        console.log("Error from update profile User", error.message)
+        return res.status(500).json({message: "Invalid Error Server"})
+    }
+}
+
+
+//ham test auth
+export const checkAuth = (req, res) => {
+    try {
+        return res.status(200).json(req.user)
+    } catch (error) {
+        console.log("Error from checkAuth", error.message)
+        return res.status(500).json({message: "Invalid Error Server"})
     }
 }
