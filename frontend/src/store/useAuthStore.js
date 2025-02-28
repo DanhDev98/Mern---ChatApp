@@ -19,4 +19,12 @@ export const useAuthStore = create((set) => ({
       set({ isCheckAuth: false });
     }
   },
+
+  signUp: async () => {
+    try {
+
+    } catch (error) {
+
+    }
+  }
 }));
