@@ -20,11 +20,8 @@ export const useAuthStore = create((set) => ({
     }
   },
 
-  signUp: async () => {
+  signUp: async (data) => {
     try {
-
-    } catch (error) {
-
-    }
-  }
+    } catch (error) {}
+  },
 }));
