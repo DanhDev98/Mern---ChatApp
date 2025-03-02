@@ -1,14 +1,8 @@
 import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
-import {
-  Eye,
-  EyeOff,
-  Key,
-  Lock,
-  Mail,
-  MessageSquare,
-  User,
-} from "lucide-react";
+import { Eye, EyeOff, Loader2, Lock, Mail, MessageSquare, User } from "lucide-react"
+import { Link } from "react-router-dom"
+import AuthImagePattern from "../components/AuthImagePattern";
 
 const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -21,7 +15,7 @@ const SignUpPage = () => {
   let confirmPassword = "";
 
   const { isSignUp, signUp } = useAuthStore();
-  const validateForm = () => {};
+  const validateForm = () => { };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -30,8 +24,9 @@ const SignUpPage = () => {
   //design giao dien in here
   return (
     <div className="min-h-screen grid lg:grid-cols-2 ">
+      {/*phan ben trai */}
       <div className="flex flex-col justify-center items-center p-6 sm:p-12 ">
-        <div className="w-full max-w-md space-y-8">
+        <div className="w-full max-w-md space-y-8" >
           <div className="text-center mb-8">
             <div className="flex flex-col items-center gap-2 group">
               <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors ">
@@ -45,60 +40,46 @@ const SignUpPage = () => {
             </div>
           </div>
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="form-control mb-2">
-              <label className="label">
-                <span className=" font-medium mb-1 flex justify-start pl-3 italic">
-                  FullName
-                </span>
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="size-5 text-base-content/40" />
-                </div>
-                <input
-                  type="text"
-                  className="input input-bordered w-full pl-10 border-1  p-1 rounded-full"
-                  placeholder="Danh dev "
+            <fieldset className="fieldset mb-0.5">
+              <legend className="fieldset-legend text-left ml-3 italic ">
+                FullName
+              </legend>
+              <label className="input validator input-bordered w-full pl-3 border-1 p-1 rounded-full">
+                <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none" stroke="currentColor"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></g></svg>
+                <input className="" type="input" required placeholder="Username"
                   value={formData.fullName}
                   onChange={(e) =>
                     setFormData({ ...formData, fullName: e.target.value })
-                  }
-                />
-              </div>
-            </div>
-
-            <div className="form-control mb-2">
-              <label className="label">
-                <span className=" font-medium mb-1 flex justify-start pl-3 italic">
-                  Email
-                </span>
+                  } />
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="size-5 text-base-content/40" />
-                </div>
-                <input
-                  type="text"
-                  className="input input-bordered w-full pl-10 border-1  p-1 rounded-full"
-                  placeholder="example@gmail.com "
+            </fieldset>
+
+            <fieldset className="fieldset mb-0.5">
+              <legend className="fieldset-legend text-left ml-3 italic ">
+                Email
+              </legend>
+              <label className="input flex items-center validator input-bordered w-full pl-3 border-1 p-1 rounded-full">
+                <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none" stroke="currentColor"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></g></svg>
+                <input className="leading-normal" type="input" required placeholder="example@gmail.com"
                   value={formData.email}
                   onChange={(e) =>
                     setFormData({ ...formData, email: e.target.value })
-                  }
-                />
-              </div>
-            </div>
-
-            <div className="form-control mb-2">
-              <label className="label">
-                <span className=" font-medium mb-1 flex justify-start pl-3 italic">
-                  Password
-                </span>
+                  } />
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="size-5 text-base-content/40" />
-                </div>
+            </fieldset>
+
+            <fieldset className="fieldset mb-0.5">
+              <legend className="fieldset-legend text-left ml-3 italic ">
+                Password
+              </legend>
+              <label className="input flex items-center validator input-bordered w-full pl-3 border-1 p-1 rounded-full">
+                <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none" stroke="currentColor"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"></path><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle></g></svg>
+                <input type={showPassword ? "text" : "password"}
+                  placeholder="•••••• "
+                  value={formData.password}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  } />
                 <button
                   type="button"
                   className="absolute inset-y-0 right-0 pl-3 pr-3 flex items-center pointer-events-auto "
@@ -110,51 +91,60 @@ const SignUpPage = () => {
                     <EyeOff className="size-5 text-base hover:text-amber-900" />
                   )}
                 </button>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  className="input input-bordered w-full pl-10 border-1  p-1 rounded-full"
-                  placeholder="•••••• "
-                  value={formData.password}
-                  onChange={(e) =>
-                    setFormData({ ...formData, password: e.target.value })
-                  }
-                />
-              </div>
-            </div>
-
-            <div className="form-control mb-2">
-              <label className="label">
-                <span className=" font-medium mb-1 flex justify-start pl-3 italic">
-                  Confirm Password
-                </span>
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="size-5 text-base-content/40" />
-                </div>
+
+            </fieldset>
+
+            <fieldset className="fieldset mb-0.5">
+              <legend className="fieldset-legend text-left ml-3 italic ">
+                Confirm Password
+              </legend>
+              <label className="input flex items-center validator input-bordered w-full pl-3 border-1 p-1 rounded-full">
+                <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none" stroke="currentColor"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"></path><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle></g></svg>
+                <input type={showPasswordConfirm ? "text" : "password"}
+                  placeholder="•••••• "
+                  onChange={(e) =>
+                    (confirmPassword = e.target.value)
+                  } />
                 <button
                   type="button"
                   className="absolute inset-y-0 right-0 pl-3 pr-3 flex items-center pointer-events-auto "
                   onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}
                 >
-                  {showPasswordConfirm ? (
+                  {showPassword ? (
                     <Eye className="size-5 text-base hover:text-amber-900" />
                   ) : (
                     <EyeOff className="size-5 text-base hover:text-amber-900" />
                   )}
                 </button>
-                <input
-                  type={showPasswordConfirm ? "text" : "password"}
-                  className="input input-bordered w-full pl-10 border-1  p-1 rounded-full"
-                  placeholder="•••••• "
-                  onChange={(e) => (confirmPassword = e.target.value)}
-                />
-              </div>
-            </div>
+              </label>
+            </fieldset>
+            <button type="submit" className="btn btn-primary w-full mt-4 " disabled={isSignUp}>
+              {isSignUp ?
+                (<>
+                  <Loader2 className="size-5 animate-spin" />
+                  Loading...
+                </>) :
+                "Create Account"
+              }
+            </button>
           </form>
-        </div>
-      </div>
-    </div>
+          <div className="text-center">
+            <div className="text-base-content/60">
+              Already have an account ? {" "}
+              <Link to={"/login"} className="link link-primary" >
+                Sign in
+              </Link>
+            </div>
+          </div>
+        </div >
+      </div >
+      {/* phan ben phai */}
+      <AuthImagePattern
+        title="Join our community"
+        subtitle="Connect with friend , share moments , and stay in touch with your loved ones "
+      />
+    </div >
   );
 };
 
