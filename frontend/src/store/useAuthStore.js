@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
+import toast, { ToastIcon } from "react-hot-toast";
 
 export const useAuthStore = create((set) => ({
   authUser: null,
@@ -21,7 +22,39 @@ export const useAuthStore = create((set) => ({
   },
 
   signUp: async (data) => {
+    set({ isSigningUp: true });
     try {
-    } catch (error) {}
+      const res = await axiosInstance.post("/auth/signup", data);
+      set({ authUser: res.data });
+      return toast.success("Dang ky tai khoan thanh cong");
+    } catch (error) {
+      return toast.error(error.response.data.message);
+    } finally {
+      set({ isSigningUp: false });
+    }
   },
+
+  logout: async () => {
+    try {
+      await axiosInstance.post("/auth/logout");
+      set({ authUser: null });
+      return toast.success("Dang xuat thanh cong");
+    } catch (error) {
+      return toast.error(error.response.data.message);
+    }
+  },
+  login: async (data) => {
+    set({ isLoging: true });
+    try {
+      const res = await axiosInstance.post("/auth/login", data);
+      set({ authUser: res.data });
+      return toast.success("Dang nhap thanh cong");
+    } catch (error) {
+      return toast.error(error.response.data.message);
+    } finally {
+      set({ isLoging: false });
+    }
+  },
+
+  updateProfilePic: async (data) => {},
 }));
