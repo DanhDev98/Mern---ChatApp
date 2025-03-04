@@ -56,5 +56,17 @@ export const useAuthStore = create((set) => ({
     }
   },
 
-  updateProfilePic: async (data) => {},
+  updateProfilePic: async (data) => {
+    set({ isUpdating: true });
+    try {
+      const res = await axiosInstance.put("/auth/update-profile", data);
+      set({ authUser: res.data });
+      return toast.success("Update hinh anh thanh cong");
+    } catch (error) {
+      console.log("error update profile", error.message);
+      return toast.error(error.response.data.message);
+    } finally {
+      set({ isUpdating: false });
+    }
+  },
 }));
