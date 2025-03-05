@@ -14,9 +14,9 @@ const SettingPage = () => {
   const { themes, setThemes } = useThemeStore();
 
   return (
-    <div className="h-screen container mx-auto px-4 pt-20 max-w-5xl text-center">
-      <div className="space-y-6">
-        <div className="flex flex-col gap-1">
+    <div className="h-fit container mx-auto px-4 pt-20 max-w-5xl ">
+      <div className="space-y-6 h-screen ">
+        <div className="flex flex-col gap-1 text-center">
           <h2 className="text-lg font-semibold">Themes</h2>
           <p className="text-sm text-base-content/70">
             Choose a theme for your chat interface
@@ -57,10 +57,10 @@ const SettingPage = () => {
           ))}
         </div>
         {/**preview section design */}
-        <h3 className="text-lg font-semibold mb-3">Preview</h3>
+        <h3 className="text-lg font-semibold mb-3 text-center">Preview</h3>
         <div className="rounded-xl border border-base-300 bg-base-100">
           <div className="bg-base-200 p-4">
-            <div className="max-w-lg mx-auto bg-amber-200">
+            <div className="max-w-lg mx-auto">
               <div className="bg-base-100 rounded-xl shadow-sm overflow-hidden">
                 <div className="px-4 py-3 border-b border-base-300 bg-base-100">
                   <div className="flex items-center gap-3">
@@ -71,22 +71,52 @@ const SettingPage = () => {
                     </div>
                   </div>
                 </div>
+                {/* chat message */}
+                <div className="p-4 space-y-4 min-h-[200px] max-h-[200px] overflow-y-auto bg-base-100 ">
+                  {PREVIEW_MESSAGE.map((msg) => (
+                    <div
+                      key={msg.id}
+                      className={`flex gap-2  ${
+                        msg.isSent ? "justify-end" : "justify-start"
+                      }`}
+                    >
+                      <div
+                        className={`p-2 rounded-lg ${
+                          msg.isSent
+                            ? "bg-primary text-primary-content"
+                            : "bg-base-200 text-base-content"
+                        }`}
+                      >
+                        <p className="text-sm">{msg.content}</p>
+                        <p
+                          className={`text-[10px] mt-1.5 ${
+                            msg.isSent
+                              ? "text-primary-content/70"
+                              : " text-base-content/70"
+                          } `}
+                        >
+                          12:00 PM
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="p-4 border-t border-base-300 bg-base-100">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      className="input flex-1 text-sm h-10 rounded-2xl"
+                      placeholder="Type a message ..."
+                      value="This is a preview"
+                      readOnly
+                    />
+                    <button className="btn btn-primary h-10 min-h-0 flex items-center justify-center">
+                      <Send size={20} />
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div className="p-4 border-t border-base-300 bg-base-100">
-          <div className="flex gap-2">
-            <input
-              type="text"
-              className="input flex-1 text-sm h-10"
-              placeholder="Type a message ..."
-              value="This is a preview"
-              readOnly
-            />
-            <button className="btn btn-primary h-10 min-h-0 flex items-center justify-center">
-              <Send size={20} />
-            </button>
           </div>
         </div>
       </div>
