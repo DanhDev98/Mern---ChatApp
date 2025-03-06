@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { connectDB } from "./lib/db.js";
-const app = express();
+import { app, server, io } from "./lib/socket.io.js";
 dotenv.config();
 app.use(express.json({ limit: "50mb" })); // Giới hạn 50MB
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
@@ -19,4 +19,4 @@ app.use(
 const PORT = process.env.PORT;
 app.use("/api/auth", authRoutes);
 app.use("/api/message", messageRoutes);
-app.listen(PORT, connectDB());
+server.listen(PORT, connectDB());
