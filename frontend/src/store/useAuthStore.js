@@ -1,19 +1,22 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
+import { io } from "socket.io-client";
 
-export const useAuthStore = create((set) => ({
+export const useAuthStore = create((set, get) => ({
   authUser: null,
   isSigningUp: false,
   isLoging: false,
   isUpdating: false,
   isCheckAuth: true,
   onlineUsers: [],
+  socket: null,
 
   checkAuth: async () => {
     try {
       const res = await axiosInstance.get("/auth/check");
       set({ authUser: res.data });
+      get().connectSocket();
     } catch (error) {
       console.log("Error from checkauth", error);
       set({ authUser: null });
@@ -27,7 +30,9 @@ export const useAuthStore = create((set) => ({
     try {
       const res = await axiosInstance.post("/auth/signup", data);
       set({ authUser: res.data });
-      return toast.success("Dang ky tai khoan thanh cong");
+      toast.success("Dang ky tai khoan thanh cong");
+      get().connectSocket();
+      window.location.reload();
     } catch (error) {
       return toast.error(error.response.data.message);
     } finally {
@@ -39,9 +44,10 @@ export const useAuthStore = create((set) => ({
     try {
       await axiosInstance.post("/auth/logout");
       set({ authUser: null });
-      return toast.success("Dang xuat thanh cong");
+      toast.success("Dang xuat thanh cong");
+      get().disconnectSocket();
     } catch (error) {
-      return toast.error(error.response.data.message);
+      toast.error(error.response.data.message);
     }
   },
   login: async (data) => {
@@ -49,7 +55,9 @@ export const useAuthStore = create((set) => ({
     try {
       const res = await axiosInstance.post("/auth/login", data);
       set({ authUser: res.data });
-      return toast.success("Dang nhap thanh cong");
+      toast.success("Dang nhap thanh cong");
+      get().connectSocket();
+      window.location.reload();
     } catch (error) {
       return toast.error(error.response.data.message);
     } finally {
@@ -62,12 +70,31 @@ export const useAuthStore = create((set) => ({
     try {
       const res = await axiosInstance.put("/auth/update-profile", data);
       set({ authUser: res.data });
-      return toast.success("Update hinh anh thanh cong");
+      toast.success("Update hinh anh thanh cong");
     } catch (error) {
       console.log("error update profile", error.message);
       return toast.error(error.response.data.message);
     } finally {
       set({ isUpdating: false });
+    }
+  },
+
+  connectSocket: () => {
+    const { authUser } = get();
+    if (!authUser || get().socket?.connected) return;
+    const socket = io("http://localhost:5001", {
+      query: { userId: authUser._id },
+    });
+    socket.connect();
+    set({ socket: socket });
+    socket.on("userOnline", (userId) => {
+      set({ onlineUsers: userId });
+    });
+  },
+  disconnectSocket: () => {
+    if (get().socket?.connected) {
+      get().socket.disconnect();
+      set({ socket: null });
     }
   },
 }));
