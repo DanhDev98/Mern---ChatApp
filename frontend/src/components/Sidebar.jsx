@@ -8,7 +8,6 @@ const Sidebar = () => {
   const { onlineUsers } = useAuthStore();
   const [showOnlyUserOnline, setShowOnlyUserOnline] = useState(false);
   useEffect(() => {
-
     getUser();
   }, [getUser])
 
@@ -30,12 +29,12 @@ const Sidebar = () => {
         <div className="mt-4 hidden lg:flex items-center gap-2">
           <label className="cursor-pointer flex items-center gap-2">
             <input type="checkbox"
-            className="checkbox checkbox-sm"
-            checked = {showOnlyUserOnline}
-            onChange={(e) => setShowOnlyUserOnline(e.target.checked)} />
+              className="checkbox checkbox-sm"
+              checked={showOnlyUserOnline}
+              onChange={(e) => setShowOnlyUserOnline(e.target.checked)} />
             <span className="text-sm ">Show only user online</span>
           </label>
-          <span className="text-xs text-zinc-500">({onlineUsers.length -1 } online) </span>
+          <span className="text-xs text-zinc-500">{onlineUsers.length - 1} online </span>
         </div>
       </div>
       <div className="overflow-y-auto w-full py-3">
