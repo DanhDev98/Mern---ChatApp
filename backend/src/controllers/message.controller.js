@@ -56,7 +56,7 @@ export const sendMessage = async (req, res) => {
     await newMessage.save();
     //xu ly realtime socket io tai day
     const recieverSocketId = getReceiverSocketId(recieverId)
-    if(recieverSocketId){
+    if (recieverSocketId) {
       io.to(recieverSocketId).emit('newMessage', newMessage);
     }
 

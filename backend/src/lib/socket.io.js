@@ -8,11 +8,13 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: ["*"],
+    origin: ["http://localhost:5173"],
     credentials: true,
-    methods: ["GET", "POST"],
   },
 });
+export function getReceiverSocketId(receiverId) {
+  return userSocketOnline[receiverId];
+}
 
 const userSocketOnline = {};
 //lắng nghe user kết nối
@@ -31,8 +33,5 @@ io.on("connection", (socket) => {
   });
 });
 
-export const getReceiverSocketId = (receiverId) => {
-  return userSocketOnline[receiverId];
-}
 
 export { io, server, app };

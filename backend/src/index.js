@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import path from "path";
 import { connectDB } from "./lib/db.js";
-import { app, server, io } from "./lib/socket.io.js";
+import { app, server } from "./lib/socket.io.js";
 dotenv.config();
 app.use(express.json({ limit: "50mb" })); // Giới hạn 50MB
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
