@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useChatStore } from "../store/useChatStore";
 import ChatHeader from "./ChatHeader";
 import MessageInput from "./MessageInput";
@@ -6,10 +6,11 @@ import MessageSkeleton from "./skeleton/MessageSkeleton";
 import { useAuthStore } from "../store/useAuthStore";
 
 const ChatContainer = () => {
-  const { messages, getMessage, isMessageLoading, selectedUser } =
+  const { messages, getMessage, isMessageLoading, selectedUser ,listenToMessage, unListenToMessage } =
     useChatStore();
 
   const { authUser } = useAuthStore();
+  const messagesEndRef = useRef(null);
   const getFormattedTime = (dateString) => {
     const now = new Date(dateString);
     const hours = now.getHours().toString().padStart(2, "0"); // Lấy giờ và thêm số 0 nếu chỉ có 1 chữ số
@@ -18,7 +19,17 @@ const ChatContainer = () => {
   };
   useEffect(() => {
     getMessage(selectedUser._id);
-  }, [selectedUser._id, getMessage]);
+    listenToMessage();
+    return () => {
+      unListenToMessage();
+    };
+  }, [selectedUser._id, getMessage, listenToMessage, unListenToMessage]);
+
+  useEffect(() => {
+    if(messagesEndRef.current && messages ){
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
   if (isMessageLoading) {
     return (
       <div className="flex flex-1 flex-col overflow-auto">
@@ -35,10 +46,12 @@ const ChatContainer = () => {
       <div className="flex-1 p-4 overflow-y-auto space-y-4">
         {messages.map((message) => (
           <div
+            ref={messagesEndRef}
             key={message._id}
             className={`chat ${
               message.senderId === authUser._id ? "chat-end" : "chat-start"
-            } `}
+            } `
+          }
           >
             <div className="chat-image avatar">
               <div className="w-10 rounded-full">
