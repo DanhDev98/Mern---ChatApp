@@ -226,7 +226,7 @@ const SignUpPage = () => {
                   className="absolute inset-y-0 right-0 pl-3 pr-3 flex items-center pointer-events-auto "
                   onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}
                 >
-                  {showPassword ? (
+                  {showPasswordConfirm ? (
                     <Eye className="size-5 text-base hover:text-amber-900" />
                   ) : (
                     <EyeOff className="size-5 text-base hover:text-amber-900" />
